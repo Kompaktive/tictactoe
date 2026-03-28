@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { createJSONStorage, persist } from "zustand/middleware";
+import { persist } from "zustand/middleware";
 
 interface NicknameStore {
   nickname?: string;
@@ -8,14 +8,11 @@ interface NicknameStore {
 
 const useNicknameStore = create<NicknameStore>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       nickname: undefined,
       setNickname: (str) => set(() => ({ nickname: str })),
     }),
-    {
-      name: "nickname",
-      storage: createJSONStorage(() => sessionStorage),
-    },
+    { name: "nickname-storage" },
   ),
 );
 
