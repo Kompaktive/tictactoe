@@ -2,13 +2,14 @@ import { child, get, ref } from "firebase/database";
 import { database } from "~/firebase";
 import { generateRandomCode } from "~/utils/crypto";
 
+export const checkRoomExists = async (code: string): Promise<boolean> => {
+  return (await get(child(ref(database), `rooms/${code}`))).exists();
+};
+
 export const generateUniqueRoomCode = async (): Promise<string> => {
   const code = generateRandomCode();
-  const roomExists: boolean = (
-    await get(child(ref(database), `rooms/${code}`))
-  ).exists();
 
-  if (roomExists) {
+  if (await checkRoomExists(code)) {
     console.log("room already exist! Generating new room code...");
     return generateUniqueRoomCode();
   }
