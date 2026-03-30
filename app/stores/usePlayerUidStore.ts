@@ -5,12 +5,12 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
-interface UidPlayerStore {
+interface PlayerUidStore {
   uid?: string;
   setUid: (str: string) => void;
 }
 
-const useUidPlayerStore = create<UidPlayerStore>()(
+const usePlayerUidStore = create<PlayerUidStore>()(
   persist(
     (set) => ({
       uid: undefined,
@@ -23,4 +23,4 @@ const useUidPlayerStore = create<UidPlayerStore>()(
   ),
 );
 
-export default useUidPlayerStore;
+export default usePlayerUidStore;
