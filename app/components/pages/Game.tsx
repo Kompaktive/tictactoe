@@ -1,12 +1,35 @@
-import useNicknameStore from "~/stores/useNicknameStore";
-import { Navigate } from "react-router";
+type Props = {
+  roomId: string;
+};
 
-const Game = () => {
-  const { nickname } = useNicknameStore();
+const Game = ({ roomId }: Props) => {
+  // const { nickname } = usePlayerStore();
 
-  if (!nickname) return <Navigate to="/" replace />;
+  // if (!nickname) return <Navigate to="/" replace />;
 
-  return <div>game</div>;
+  // {
+  //   "sessions": {
+  //     "session_123": {
+  //       "status": "ongoing",
+  //       "active_player": "x",
+  //       "last_move_at": 1711054800
+  //     }
+  //   },
+  //   "boards": {
+  //     "session_123": ["x", "", "o", "", "", "", "", "", ""]
+  //   },
+  //   "members": {
+  //     "session_123": { "x": "UID_1", "o": "UID_2" }
+  //   },
+  //   "metadata": {
+  //     "round": 1,
+  //     "score_x": 0,
+  //     "score_o": 0,
+  //     "last_move_at": 1711054800 // Timestamp for timeout logic
+  //   }
+  // }
+
+  return <div>Game {roomId}</div>;
 };
 
 export default Game;
