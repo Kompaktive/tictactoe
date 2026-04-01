@@ -1,13 +1,15 @@
-import { ref, set, type DatabaseReference } from "firebase/database";
+import { ref, runTransaction, type DatabaseReference } from "firebase/database";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import Button from "~/components/atoms/Button";
 import TextField from "~/components/atoms/TextField";
 import { database } from "~/firebase";
-import { checkRoomExists, generateUniqueRoomCode } from "~/helpers/room";
+import { checkRoomExists } from "~/helpers/room";
 import useMenuNavigationHistoryStore from "~/stores/useMenuNavigationHistoryStore";
 import useNicknameStore from "~/stores/useNicknameStore";
 import usePlayerUidStore from "~/stores/usePlayerUidStore";
+import type { Pairing } from "~/types/game";
+import { generateRandomCode } from "~/utils/crypto";
 
 const PlayWithFriendMenu = () => {
   const navigate = useNavigate();
@@ -21,18 +23,53 @@ const PlayWithFriendMenu = () => {
   const [roomCodeInput, setRoomCodeInput] = useState<string>("");
   const [isJoining, setIsJoining] = useState<boolean>(false);
 
-  const createRoom = async () => {
-    const roomId: string = await generateUniqueRoomCode();
-    const roomRef: DatabaseReference = ref(database, `rooms/${roomId}`);
+  const writeNewRoom = async (
+    roomHost: Omit<Pairing, "guest">,
+    attempt: number = 0,
+  ) => {
+    const MAX_ATTEMPTS: number = 10;
 
+    if (attempt >= MAX_ATTEMPTS) {
+      // TODO: display max attempts error toast "server is too busy. Please try again later"
+      console.error("MAX ATTEMPTS REACHED");
+      return;
+    }
+
+    try {
+      const roomId: string = generateRandomCode();
+      const roomRef: DatabaseReference = ref(database, `rooms/${roomId}`);
+
+      const result = await runTransaction(roomRef, (room: Pairing | null) => {
+        if (!room) return roomHost;
+        else {
+          console.warn(
+            `room with ID ${roomId} already exists, aborting...`,
+            room,
+          );
+          return;
+        }
+      });
+
+      if (result.committed) navigate(`/${roomId}`);
+      else {
+        console.error("Lobby creation failed: Room code taken");
+        return await writeNewRoom(roomHost, attempt + 1);
+      }
+    } catch (error) {
+      console.error("Failed to create lobby", error);
+      // TODO: display toast
+    }
+  };
+
+  const createRoom = async () => {
     let nickname: string;
-    let playerUid: string;
+    let hostUid: string;
 
     if (!storedUid) {
-      const generatedPlayerUid: string = crypto.randomUUID();
-      setStoredUid(generatedPlayerUid);
-      playerUid = generatedPlayerUid;
-    } else playerUid = storedUid;
+      const generatedHostUid: string = crypto.randomUUID();
+      setStoredUid(generatedHostUid);
+      hostUid = generatedHostUid;
+    } else hostUid = storedUid;
 
     if (!storedNickname) {
       const generatedNickname: string = "Generated Nickname";
@@ -40,19 +77,12 @@ const PlayWithFriendMenu = () => {
       nickname = generatedNickname;
     } else nickname = storedNickname;
 
-    set(roomRef, {
-      player_1: {
+    await writeNewRoom({
+      host: {
         nickname: nickname,
-        uid: playerUid,
+        uid: hostUid,
       },
-    })
-      .then(() => {
-        navigate(`/${roomId}`);
-      })
-      .catch(() => {
-        console.error("Failed to create lobby");
-        // TODO: display toast
-      });
+    });
 
     // onValue(roomRef, (snapshot) => {
     //   const lobbyData: Lobby = snapshot.val();
