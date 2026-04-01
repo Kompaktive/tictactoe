@@ -4,31 +4,6 @@ import useNicknameStore from "~/stores/useNicknameStore";
 import useMenuNavigationHistoryStore from "~/stores/useMenuNavigationHistoryStore";
 import PlayWithFriendMenu from "../organisms/menus/PlayWithFriendMenu";
 
-type Marker = "o" | "x" | "";
-
-type Player = {
-  nickname: string;
-  uid: string;
-};
-
-type Lobby = {
-  player_1?: Player | null;
-  player_2?: Player | null;
-};
-
-// prettier-ignore
-type GameSession = {
-  active_player: Marker;
-  board: [Marker, Marker, Marker, Marker, Marker, Marker, Marker, Marker, Marker];
-  last_move_at: number; // Date timestamp in millisecond
-  player_o: Player["nickname"]
-  player_x: Player["nickname"]
-  round: number;
-  score_o: number;
-  score_x: number;
-  status: "waiting" | "ongoing" | "completed";
-};
-
 const Menu = () => {
   const { menuNavigationHistory, pushMenuNavigationHistory } =
     useMenuNavigationHistoryStore();
