@@ -83,26 +83,6 @@ const PlayWithFriendMenu = () => {
         uid: hostUid,
       },
     });
-
-    // onValue(roomRef, (snapshot) => {
-    //   const lobbyData: Lobby = snapshot.val();
-    //   console.log("LOBBY DATAAAA", lobbyData);
-
-    //   // TODO: if both player is present, then proceed to the game session
-    //   /* //TODO: initialize game session
-    //   const gameSession: GameSession = {
-    //     active_player: "",
-    //     board: ["", "", "", "", "", "", "", "", ""],
-    //     last_move_at: 0,
-    //     round: 0,
-    //     score_o: 0,
-    //     score_x: 0,
-    //     status: "waiting",
-    //     player_o: "",
-    //     player_x: "",
-    //   };
-    //   */
-    // });
   };
 
   const joinRoom = async () => {
