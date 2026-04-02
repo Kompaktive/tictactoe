@@ -6,14 +6,14 @@ import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
 interface PlayerUidStore {
-  uid?: string;
+  uid: string;
   setUid: (str: string) => void;
 }
 
 const usePlayerUidStore = create<PlayerUidStore>()(
   persist(
     (set) => ({
-      uid: undefined,
+      uid: "",
       setUid: (str) => set(() => ({ uid: str })),
     }),
     {
