@@ -5,9 +5,8 @@ import Button from "~/components/atoms/Button";
 import TextField from "~/components/atoms/TextField";
 import { database } from "~/firebase";
 import { checkRoomExists } from "~/helpers/room";
+import usePlayerIdentity from "~/hooks/usePlayerIdentity";
 import useMenuNavigationHistoryStore from "~/stores/useMenuNavigationHistoryStore";
-import useNicknameStore from "~/stores/useNicknameStore";
-import usePlayerUidStore from "~/stores/usePlayerUidStore";
 import type { Pairing } from "~/types/game";
 import { generateRandomCode } from "~/utils/crypto";
 
@@ -15,9 +14,7 @@ const PlayWithFriendMenu = () => {
   const navigate = useNavigate();
   const { popMenuNavigationHistory } = useMenuNavigationHistoryStore();
 
-  const { uid: storedUid, setUid: setStoredUid } = usePlayerUidStore();
-  const { nickname: storedNickname, setNickname: setStoredNickname } =
-    useNicknameStore();
+  const { nickname, uid } = usePlayerIdentity();
 
   // join room states
   const [roomCodeInput, setRoomCodeInput] = useState<string>("");
@@ -62,25 +59,10 @@ const PlayWithFriendMenu = () => {
   };
 
   const createRoom = async () => {
-    let nickname: string;
-    let hostUid: string;
-
-    if (!storedUid) {
-      const generatedHostUid: string = crypto.randomUUID();
-      setStoredUid(generatedHostUid);
-      hostUid = generatedHostUid;
-    } else hostUid = storedUid;
-
-    if (!storedNickname) {
-      const generatedNickname: string = "Generated Nickname";
-      setStoredNickname(generatedNickname);
-      nickname = generatedNickname;
-    } else nickname = storedNickname;
-
     await writeNewRoom({
       host: {
         nickname: nickname,
-        uid: hostUid,
+        uid: uid,
       },
     });
   };
