@@ -26,5 +26,5 @@ export type GameSession = {
   round: number;
   score_o: number;
   score_x: number;
-  status: "waiting" | "ongoing" | "completed";
+  status: "ongoing" | "completed";
 };
