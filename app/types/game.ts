@@ -20,7 +20,6 @@ export type TicTacToeBoard = [
 export type GameSession = {
   active_player: Marker;
   board: TicTacToeBoard;
-  last_move_at: number; // Date timestamp in millisecond
   player_o_name: string;
   player_x_name: string;
   round: number;
