@@ -9,11 +9,12 @@ const usePlayerIdentity = () => {
   const [isHydrated, setIsHydrated] = useState<boolean>(false);
 
   useEffect(() => {
-    setIsHydrated(true);
-  }, []);
+    const uidHasHydrated: boolean = usePlayerUidStore.persist.hasHydrated();
+    const nicknameHasHydrated: boolean = useNicknameStore.persist.hasHydrated();
 
-  useEffect(() => {
-    if (!isHydrated) return;
+    if (uidHasHydrated && nicknameHasHydrated) {
+      setIsHydrated(true);
+    } else return;
 
     if (!uid) {
       const generatedHostUid: string = crypto.randomUUID();
@@ -25,7 +26,7 @@ const usePlayerIdentity = () => {
       const generatedNickname: string = "Generated Nickname";
       setNickname(generatedNickname);
     }
-  }, [uid, nickname, setUid, setNickname, isHydrated]);
+  }, [uid, nickname, setUid, setNickname]);
 
   return { nickname, uid, isHydrated };
 };
