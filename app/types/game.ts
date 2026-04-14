@@ -11,7 +11,7 @@ export type Pairing = {
 export type Marker = "o" | "x" | "";
 
 // prettier-ignore
-export type TicTacToeBoard = [
+export type TicTacToeBoardState = [
   Marker, Marker, Marker,
   Marker, Marker, Marker,
   Marker, Marker, Marker,
@@ -19,7 +19,7 @@ export type TicTacToeBoard = [
 
 export type GameSession = {
   active_player: Marker;
-  board: TicTacToeBoard;
+  board: TicTacToeBoardState;
   player_o_name: string;
   player_x_name: string;
   round: number;
