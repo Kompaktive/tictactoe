@@ -1,3 +1,5 @@
+export type Role = "host" | "guest" | "spectator";
+
 export type Player = {
   nickname: string;
   uid: string;
