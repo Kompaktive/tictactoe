@@ -20,10 +20,11 @@ export type TicTacToeBoardState = [
 export type GameSession = {
   active_player: Marker;
   board: TicTacToeBoardState;
-  player_o_name: string;
-  player_x_name: string;
+  host_name: string;
+  host_marker: Marker;
+  guest_name: string;
   round: number;
-  score_o: number;
-  score_x: number;
+  score_host: number;
+  score_guest: number;
   status: "ongoing" | "completed";
 };
