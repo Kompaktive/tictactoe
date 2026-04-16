@@ -8,7 +8,7 @@ import { checkRoomExists } from "~/helpers/room";
 import usePlayerIdentity from "~/hooks/usePlayerIdentity";
 import useMenuNavigationHistoryStore from "~/stores/useMenuNavigationHistoryStore";
 import type { Pairing } from "~/types/game";
-import { generateRandomCode } from "~/utils/crypto";
+import { generateRandomCode } from "~/utils/generateRandomCode";
 
 const PlayWithFriendMenu = () => {
   const navigate = useNavigate();
