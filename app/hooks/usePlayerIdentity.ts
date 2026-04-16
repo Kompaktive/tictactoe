@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import useNicknameStore from "~/stores/useNicknameStore";
 import usePlayerUidStore from "~/stores/usePlayerUidStore";
+import { generateRandomNickname } from "~/utils/generateRandomNickname";
 
 const usePlayerIdentity = () => {
   const { uid, setUid } = usePlayerUidStore();
@@ -24,8 +25,7 @@ const usePlayerIdentity = () => {
     }
 
     if (!nickname) {
-      // TODO: implement random nickname generation
-      const generatedNickname: string = "Generated Nickname";
+      const generatedNickname: string = generateRandomNickname();
       setNickname(generatedNickname);
     }
   }, [uid, nickname, setUid, setNickname, isHydrated]);
