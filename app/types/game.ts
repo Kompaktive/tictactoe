@@ -20,7 +20,7 @@ export type TicTacToeBoardState = [
 ]
 
 export type GameSession = {
-  active_player: Marker;
+  turn: Marker;
   board: TicTacToeBoardState;
   host_name: string;
   host_marker: Marker;
