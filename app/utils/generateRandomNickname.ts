@@ -1,4 +1,4 @@
-const ADJECTIVES = [
+const PREFIXES = [
   "Bold",
   "Calm",
   "Deep",
@@ -42,7 +42,7 @@ const SUBJECTS = [
 
 export const generateRandomNickname = (): string => {
   const randomPickedAdjective =
-    ADJECTIVES[Math.floor(Math.random() * ADJECTIVES.length)];
+    PREFIXES[Math.floor(Math.random() * PREFIXES.length)];
   const randomPickedSubject =
     SUBJECTS[Math.floor(Math.random() * SUBJECTS.length)];
   return `${randomPickedAdjective} ${randomPickedSubject}`;
