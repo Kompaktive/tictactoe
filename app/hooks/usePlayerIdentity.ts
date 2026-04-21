@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import useNicknameStore from "~/stores/useNicknameStore";
 import usePlayerUidStore from "~/stores/usePlayerUidStore";
-import { generateRandomNickname } from "~/utils/generateRandomNickname";
+import { generateRandomNickname } from "~/utils/generate";
 
 const usePlayerIdentity = () => {
   const { uid, setUid } = usePlayerUidStore();
