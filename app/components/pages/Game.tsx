@@ -1,35 +1,124 @@
+import { useEffect, useState } from "react";
+import { onValue, ref, runTransaction } from "firebase/database";
+import type { GameSession, Pairing, Player, Role } from "~/types/game";
+import usePlayerIdentity from "~/hooks/usePlayerIdentity";
+import { database } from "~/firebase";
+import LobbyTemplate from "../templates/LobbyTemplate";
+import GameTemplate from "../templates/GameTemplate";
+import { roomRef } from "~/services/firebase/room.service";
+
 type Props = {
   roomId: string;
 };
 
 const Game = ({ roomId }: Props) => {
-  // const { nickname } = usePlayerStore();
+  const { nickname, uid, isHydrated } = usePlayerIdentity();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  // if (!nickname) return <Navigate to="/" replace />;
+  const [role, setRole] = useState<Role>("spectator");
+  const [game, setGame] = useState<GameSession>();
 
-  // {
-  //   "sessions": {
-  //     "session_123": {
-  //       "status": "ongoing",
-  //       "active_player": "x",
-  //       "last_move_at": 1711054800
-  //     }
-  //   },
-  //   "boards": {
-  //     "session_123": ["x", "", "o", "", "", "", "", "", ""]
-  //   },
-  //   "members": {
-  //     "session_123": { "x": "UID_1", "o": "UID_2" }
-  //   },
-  //   "metadata": {
-  //     "round": 1,
-  //     "score_x": 0,
-  //     "score_o": 0,
-  //     "last_move_at": 1711054800 // Timestamp for timeout logic
-  //   }
-  // }
+  const writeGameSession = async (
+    roomId: string,
+    pairing: Required<Pairing>,
+  ) => {
+    const gameSessionRef = ref(database, `game-sessions/${roomId}`);
+    const result = await runTransaction(
+      gameSessionRef,
+      (session: GameSession) => {
+        const xMarker: boolean = Math.random() < 0.5;
+        const data: GameSession = {
+          turn: "x",
+          board: ["", "", "", "", "", "", "", "", ""],
+          host_name: pairing.host.nickname,
+          host_marker: xMarker ? "x" : "o",
+          guest_name: pairing.guest!.nickname,
+          round: 1,
+          score_host: 0,
+          score_guest: 0,
+          status: "ongoing",
+        };
 
-  return <div>Game {roomId}</div>;
+        if (!session) return data;
+        else {
+          console.warn(
+            `game in ${roomId} already in session, aborting...`,
+            session,
+          );
+        }
+      },
+    );
+
+    if (result.committed) {
+      console.log("game is now in session. Enjoy!");
+    }
+  };
+
+  useEffect(() => {
+    if (!isHydrated) return;
+
+    const unsubscribe = onValue(roomRef(roomId), async (snapshot) => {
+      const room: Pairing = snapshot.val();
+
+      // check for matching uid to prevent filling the room with the same user
+      if (room.host.uid === uid) setRole("host");
+      else if (!!room.guest) {
+        if (room.guest.uid === uid) setRole("guest");
+        else setRole("spectator");
+      } else {
+        const guestRef = ref(database, `rooms/${roomId}/guest`);
+        const writeNewGuest = await runTransaction(
+          guestRef,
+          (guest: Player) => {
+            const data: Player = {
+              nickname: nickname,
+              uid: uid,
+            };
+            if (!guest) return data;
+            else {
+              console.warn(
+                `guest in ${roomId} already exists, aborting...`,
+                room,
+              );
+            }
+          },
+        );
+
+        if (writeNewGuest.committed) {
+          console.log("Joined as a guest");
+          writeGameSession(roomId, {
+            host: room.host,
+            guest: {
+              nickname: nickname,
+              uid: uid,
+            },
+          });
+        }
+      }
+
+      setIsLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, [uid, isHydrated]);
+
+  useEffect(() => {
+    const gameRef = ref(database, `game-sessions/${roomId}`);
+
+    const unsubscribe = onValue(gameRef, async (snapshot) => {
+      const session: GameSession = snapshot.val();
+      setGame(session);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  if (isLoading) return <div>Loading...</div>;
+  return !!game ? (
+    <GameTemplate roomId={roomId} session={game} role={role} />
+  ) : (
+    <LobbyTemplate />
+  );
 };
 
 export default Game;
