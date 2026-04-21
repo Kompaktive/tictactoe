@@ -1,7 +1,7 @@
 import { data, isRouteErrorResponse } from "react-router";
 import type { Route } from "./+types/room-id";
 import Game from "~/components/pages/Game";
-import { checkRoomExists } from "~/helpers/room";
+import { checkRoomExists } from "~/services/firebase/room.service";
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: "Tic-Tac-Toe" }, { name: "description", content: "Play!" }];
