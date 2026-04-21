@@ -48,10 +48,6 @@ export const endMatch = async (
   }
 };
 
-export const sendRematchRequest = async () => {
-  // TODO: send rematch request
-};
-
 export const rematch = async (roomId: string, currentHostMarker: Marker) => {
   const updates: Record<string, any> = {};
   const parent = `game-sessions/${roomId}`;
