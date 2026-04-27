@@ -1,20 +1,31 @@
-import { ref, runTransaction, type DatabaseReference } from "firebase/database";
+import {
+  push,
+  ref,
+  runTransaction,
+  type DatabaseReference,
+} from "firebase/database";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import Button from "~/components/atoms/Button";
 import TextField from "~/components/atoms/TextField";
 import { database } from "~/firebase";
-import usePlayerIdentity from "~/hooks/usePlayerIdentity";
+import { useUidCookies } from "~/hooks/useUidCookies";
 import { checkRoomExists } from "~/services/firebase/room.service";
 import useMenuNavigationHistoryStore from "~/stores/useMenuNavigationHistoryStore";
+import useNicknameStore from "~/stores/useNicknameStore";
 import type { Pairing } from "~/types/game";
-import { generateRandomCode } from "~/utils/generate";
+import { generateRandomCode, generateRandomNickname } from "~/utils/generate";
 
 const PlayWithFriendMenu = () => {
   const navigate = useNavigate();
   const { popMenuNavigationHistory } = useMenuNavigationHistoryStore();
 
-  const { nickname, uid } = usePlayerIdentity();
+  const { uid: uidCookies, setUid: setUidCookies } = useUidCookies();
+  const { nickname: storedNickname, setNickname: storeNickname } =
+    useNicknameStore();
+
+  // create room states
+  const [isCreatingRoom, setIsCreatingRoom] = useState<boolean>(false);
 
   // join room states
   const [roomCodeInput, setRoomCodeInput] = useState<string>("");
@@ -59,12 +70,30 @@ const PlayWithFriendMenu = () => {
   };
 
   const createRoom = async () => {
-    await writeNewRoom({
-      host: {
-        nickname: nickname,
-        uid: uid,
-      },
-    });
+    if (isCreatingRoom) return;
+
+    setIsCreatingRoom(true);
+
+    try {
+      const uid: string = uidCookies ?? crypto.randomUUID();
+      const nickname: string = !!storedNickname
+        ? storedNickname
+        : generateRandomNickname();
+
+      if (!uidCookies) setUidCookies(uid);
+      if (!storedNickname) storeNickname(nickname);
+
+      await writeNewRoom({
+        host: {
+          nickname: nickname,
+          uid: uid,
+        },
+      });
+    } catch (err) {
+      console.error("error in createRoom():", err);
+    } finally {
+      setIsCreatingRoom(false);
+    }
   };
 
   const joinRoom = async () => {

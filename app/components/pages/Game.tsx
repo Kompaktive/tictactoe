@@ -1,18 +1,20 @@
 import { useEffect, useState } from "react";
 import { onValue, ref, runTransaction } from "firebase/database";
 import type { GameSession, Pairing, Player, Role } from "~/types/game";
-import usePlayerIdentity from "~/hooks/usePlayerIdentity";
 import { database } from "~/firebase";
 import LobbyTemplate from "../templates/LobbyTemplate";
 import GameTemplate from "../templates/GameTemplate";
 import { roomRef } from "~/services/firebase/room.service";
+import { useUidCookies } from "~/hooks/useUidCookies";
+import useNicknameStore from "~/stores/useNicknameStore";
 
 type Props = {
   roomId: string;
 };
 
 const Game = ({ roomId }: Props) => {
-  const { nickname, uid, isHydrated } = usePlayerIdentity();
+  const { uid } = useUidCookies();
+  const { nickname, hasHydrated } = useNicknameStore();
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const [role, setRole] = useState<Role>("spectator");
@@ -55,7 +57,7 @@ const Game = ({ roomId }: Props) => {
   };
 
   useEffect(() => {
-    if (!isHydrated) return;
+    if (!hasHydrated) return;
 
     const unsubscribe = onValue(roomRef(roomId), async (snapshot) => {
       const room: Pairing = snapshot.val();
@@ -100,7 +102,7 @@ const Game = ({ roomId }: Props) => {
     });
 
     return () => unsubscribe();
-  }, [uid, isHydrated]);
+  }, [uid, hasHydrated]);
 
   useEffect(() => {
     const gameRef = ref(database, `game-sessions/${roomId}`);
