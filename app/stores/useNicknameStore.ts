@@ -18,7 +18,7 @@ const useNicknameStore = create<NicknameStore>()(
     }),
     {
       name: "nickname-storage",
-      partialize: (state) => ({ nickname: state.nickname }),
+      partialize: (state) => ({ nickname: state.nickname }), // only save nickname to localStorage
       onRehydrateStorage: () => (state) => {
         if (state) state.setHasHydrated(true);
       },
