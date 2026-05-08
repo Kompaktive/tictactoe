@@ -113,6 +113,7 @@ const LobbyTemplate = ({ roomId, host }: Props) => {
                 value={storedNickname}
                 onChange={(e) => storeNickname(e.target.value)}
                 spellCheck={false}
+                maxLength={15}
               />
             </label>
             Host: {host.nickname}

@@ -19,6 +19,7 @@ const Menu = () => {
             value={nickname}
             onChange={(e) => setNickname(e.target.value)}
             spellCheck={false}
+            maxLength={15}
           />
         </label>
 
