@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import type { Marker, TicTacToeBoardState } from "~/types/game";
 import { getWinningLines } from "~/utils/gameLogic";
+import XMarker from "../atoms/icons/XMarker";
+import OMarker from "../atoms/icons/OMarker";
 
 type GameOver = {
   winner: Marker;
@@ -40,18 +42,19 @@ const TicTacToeBoard = ({ state, onClickCell, onGameOver }: Props) => {
   }, [state]);
 
   return (
-    <section className="bg-dark grid aspect-square max-w-lg grow grid-cols-3 gap-2 rounded-xl p-2">
+    <section className="bg-dark min-w-5xs grid aspect-square grow grid-cols-3 items-center justify-center gap-2 overflow-hidden">
       {state.map((marker, index) => (
         <button
           key={`square-${index}`}
           type="button"
-          className="text-dark bg-background aspect-square w-full cursor-pointer rounded-xl disabled:cursor-default"
+          className="text-dark bg-background aspect-square w-full cursor-pointer p-1 disabled:cursor-default"
           disabled={!!marker || isGameOver}
           onClick={() => {
             onClickCell(index);
           }}
         >
-          {marker}
+          {marker === "x" && <XMarker />}
+          {marker === "o" && <OMarker />}
         </button>
       ))}
     </section>
