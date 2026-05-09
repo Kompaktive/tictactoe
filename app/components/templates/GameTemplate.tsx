@@ -34,7 +34,7 @@ const GameTemplate = ({ roomId, session, role }: Props) => {
 
   return (
     <main className="container mx-auto flex h-screen items-center justify-center">
-      <div className="grow space-y-4 p-6">
+      <div className="grow space-y-4 p-6 md:space-y-10">
         <Scoreboard
           round={session.round}
           host={{
