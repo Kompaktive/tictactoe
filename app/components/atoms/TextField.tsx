@@ -10,7 +10,7 @@ const TextField = ({ className, ...prop }: Props) => {
     <input
       type="text"
       className={cn(
-        "bg-dark rounded-lg px-3 py-2 text-white focus:outline-0",
+        "bg-dark-lighter rounded-lg px-3 py-2 text-white focus:outline-0",
         className,
       )}
       {...prop}
