@@ -7,8 +7,10 @@ import {
 import TicTacToeBoard from "../organisms/TicTacToeBoard";
 import { useEffect, useState } from "react";
 import { endMatch, makeMove, rematch } from "~/services/firebase/game.service";
-import PlayerCard from "../molecules/PlayerCard";
 import Button from "../atoms/Button";
+import { cn } from "~/utils/cn";
+import { getAssignedMarker } from "~/utils/onlineGameLogic";
+import Scoreboard from "../organisms/Scoreboard";
 
 type Props = {
   roomId: string;
@@ -16,71 +18,41 @@ type Props = {
   role: Role;
 };
 
-const getMarker = (gameSession: GameSession, role: Role): Marker => {
-  if (role === "spectator") return "";
-  if (role === "host") return gameSession.host_marker;
-  else {
-    if (gameSession.host_marker === "o") return "x";
-    else return "o";
-  }
-};
-
 const GameTemplate = ({ roomId, session, role }: Props) => {
   const [localBoardState, setLocalBoardState] = useState<TicTacToeBoardState>(
     session.board,
   );
-  const yourMarker: Marker = getMarker(session, role);
+  const yourMarker: Marker = getAssignedMarker(session, role);
   const opponentMarker: Marker = yourMarker === "x" ? "o" : "x";
+
+  const playedAsGuest: boolean = role === "guest";
+  const isSpectator: boolean = role === "spectator";
 
   useEffect(() => {
     setLocalBoardState(session.board);
   }, [session]);
 
   return (
-    <main className="container mx-auto flex h-screen flex-col justify-center space-y-2 p-10">
-      {/* scoreboard */}
-      <div className="flex justify-between">
-        {role === "host" || role === "spectator" ? (
-          <PlayerCard
-            nickname={session.host_name}
-            marker={
-              role === "spectator" ? getMarker(session, "host") : yourMarker
-            }
-            score={session.score_host}
-          />
-        ) : (
-          <PlayerCard
-            nickname={session.guest_name}
-            marker={yourMarker}
-            score={session.score_guest}
-          />
-        )}
+    <main className="container mx-auto flex h-screen items-center justify-center">
+      <div className="grow space-y-4 p-6">
+        <Scoreboard
+          round={session.round}
+          host={{
+            nickname: playedAsGuest ? session.guest_name : session.host_name,
+            marker: isSpectator
+              ? getAssignedMarker(session, "host")
+              : yourMarker,
+            score: playedAsGuest ? session.score_guest : session.score_host,
+          }}
+          guest={{
+            nickname: playedAsGuest ? session.host_name : session.guest_name,
+            marker: isSpectator
+              ? getAssignedMarker(session, "guest")
+              : opponentMarker,
+            score: playedAsGuest ? session.score_host : session.score_guest,
+          }}
+        />
 
-        <div>
-          <div>round</div>
-          <div>{session.round}</div>
-        </div>
-
-        {role === "host" ? (
-          <PlayerCard
-            nickname={session.guest_name}
-            marker={opponentMarker}
-            score={session.score_guest}
-          />
-        ) : (
-          <PlayerCard
-            nickname={session.host_name}
-            marker={
-              role === "spectator"
-                ? getMarker(session, "guest")
-                : opponentMarker
-            }
-            score={session.score_host}
-          />
-        )}
-      </div>
-
-      <div className="flex justify-center">
         <TicTacToeBoard
           state={localBoardState}
           onClickCell={async (cellIndex) => {
@@ -133,17 +105,17 @@ const GameTemplate = ({ roomId, session, role }: Props) => {
             await endMatch(roomId, winnerField);
           }}
         />
-      </div>
 
-      {session.status === "completed" && (
         <Button
+          className={cn(session.status === "ongoing" && "invisible", "w-full")}
+          disabled={session.status === "ongoing"}
           onClick={() => {
             rematch(roomId, session.host_marker);
           }}
         >
           Rematch
         </Button>
-      )}
+      </div>
     </main>
   );
 };
