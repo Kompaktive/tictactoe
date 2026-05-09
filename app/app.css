@@ -5,6 +5,7 @@
   --color-primary: oklch(0.6248 0.2388 26.93);
   --color-secondary: oklch(0.4635 0.0735 203.93);
   --color-dark: oklch(0.2749 0.0188 258.37);
+  --color-dark-lighter: oklch(0.3546 0.0188 258.37);
   --color-background: oklch(0.6903 0.1431 161.07);
 
   --color-white: oklch(1 0 0);
