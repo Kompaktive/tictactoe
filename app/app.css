@@ -24,7 +24,15 @@
   --text-20: 1.25rem;
   --text-22: 1.375rem;
   --text-24: 1.5rem;
+  --text-32: 2rem;
   --text-72: 4.5rem;
+
+  --spacing-4xs: 14rem;
+  --spacing-5xs: 12rem;
+
+  --breakpoint-*: initial;
+  --breakpoint-sm: 28rem;
+  --breakpoint-md: 36rem;
 }
 
 html,
