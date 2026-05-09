@@ -1,17 +1,22 @@
 import type { Marker } from "~/types/game";
+import OMarker from "../atoms/icons/OMarker";
+import XMarker from "../atoms/icons/XMarker";
 
 type Props = {
-  nickname: string;
   marker: Marker;
-  score: number;
+  nickname: string;
 };
 
-const PlayerCard = ({ nickname, marker, score }: Props) => {
+const PlayerCard = ({ nickname, marker }: Props) => {
   return (
-    <div className="bg-dark rounded-xl p-2 text-center text-white">
-      <div>{nickname}</div>
-      <div>{marker}</div>
-      <div>{score}</div>
+    <div className="bg-dark flex flex-col justify-between rounded-xl p-2 text-center text-white">
+      <span className="text-20 block font-medium">{nickname}</span>
+
+      <div className="flex items-center justify-center">
+        <div className="size-12">
+          {marker === "x" ? <XMarker /> : <OMarker />}
+        </div>
+      </div>
     </div>
   );
 };
