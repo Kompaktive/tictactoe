@@ -10,7 +10,9 @@ type Props = {
 const PlayerCard = ({ nickname, marker }: Props) => {
   return (
     <div className="bg-dark flex flex-col justify-between rounded-xl p-2 text-center text-white">
-      <span className="text-20 block font-medium">{nickname}</span>
+      <span className="text-20 block font-medium wrap-break-word">
+        {nickname}
+      </span>
 
       <div className="flex items-center justify-center">
         <div className="size-12">
