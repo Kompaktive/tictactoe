@@ -34,12 +34,9 @@ const Menu = () => {
                 Play with Friend
               </Button>
 
-              <div className="flex items-center gap-x-2">
-                <Button className="w-full" onClick={() => {}}>
-                  Practice with AI
-                </Button>
-                <Button className="w-full">Difficulty: Impossible</Button>
-              </div>
+              <Button className="w-full" onClick={() => {}}>
+                Play with AI
+              </Button>
             </div>
           )}
 
