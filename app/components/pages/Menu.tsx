@@ -23,7 +23,7 @@ const Menu = () => {
           />
         </label>
 
-        <section className="mt-2">
+        <section className="mt-12">
           {/* main menu */}
           {!menuNavigationHistory.length && (
             <div className="space-y-2">
