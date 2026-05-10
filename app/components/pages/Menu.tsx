@@ -28,15 +28,12 @@ const Menu = () => {
           {!menuNavigationHistory.length && (
             <div className="space-y-2">
               <Button
-                className="w-full"
                 onClick={() => pushMenuNavigationHistory("PLAY_WITH_FRIEND")}
               >
                 Play with Friend
               </Button>
 
-              <Button className="w-full" onClick={() => {}}>
-                Play with AI
-              </Button>
+              <Button onClick={() => {}}>Play with AI</Button>
             </div>
           )}
 

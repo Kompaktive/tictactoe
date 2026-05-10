@@ -14,7 +14,7 @@ const Button = ({
     <button
       type="button"
       className={cn(
-        "bg-dark text-background rounded-xl p-4 hover:cursor-pointer",
+        "bg-dark text-background w-full rounded-xl p-4 hover:cursor-pointer",
         className,
       )}
       {...props}

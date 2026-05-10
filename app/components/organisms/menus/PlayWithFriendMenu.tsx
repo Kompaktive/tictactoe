@@ -106,28 +106,18 @@ const PlayWithFriendMenu = () => {
   return (
     <>
       <div className="space-y-2">
-        <Button className="w-full" onClick={() => createRoom()}>
-          Create a room
-        </Button>
+        <Button onClick={() => createRoom()}>Create a room</Button>
         <TextField
-          className="w-full"
           value={roomCodeInput}
           onChange={(e) => setRoomCodeInput(e.target.value)}
           spellCheck={false}
         />
-        <Button
-          className="w-full"
-          disabled={isJoining}
-          onClick={() => joinRoom()}
-        >
+        <Button disabled={isJoining} onClick={() => joinRoom()}>
           {isJoining ? "Joining..." : "Join Room"}
         </Button>
       </div>
 
-      <Button
-        className="mt-8 w-full"
-        onClick={() => popMenuNavigationHistory()}
-      >
+      <Button className="mt-8" onClick={() => popMenuNavigationHistory()}>
         Back
       </Button>
     </>
