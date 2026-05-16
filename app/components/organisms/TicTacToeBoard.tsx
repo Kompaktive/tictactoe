@@ -25,7 +25,6 @@ const TicTacToeBoard = ({ state, onClickCell, onGameOver }: Props) => {
 
     if (!!xWins.length || !!oWins.length || hasNoMove) {
       setIsGameOver(true);
-      console.log("onGameOver Called!");
 
       if (!!xWins.length || !!oWins.length) {
         onGameOver({
