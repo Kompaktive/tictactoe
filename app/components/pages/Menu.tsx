@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router";
 import TextField from "../atoms/TextField";
 import Button from "../atoms/Button";
 import useNicknameStore from "~/stores/useNicknameStore";
@@ -8,6 +9,8 @@ const Menu = () => {
   const { menuNavigationHistory, pushMenuNavigationHistory } =
     useMenuNavigationHistoryStore();
   const { nickname, setNickname } = useNicknameStore();
+
+  const navigate = useNavigate();
 
   return (
     <main className="mx-8 flex h-screen flex-col items-center justify-center">
@@ -33,7 +36,7 @@ const Menu = () => {
                 Play with Friend
               </Button>
 
-              <Button onClick={() => {}}>Play with AI</Button>
+              <Button onClick={() => navigate("/ai")}>Play against AI</Button>
             </div>
           )}
 
