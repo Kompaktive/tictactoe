@@ -10,17 +10,28 @@ const getEmptyIndexes = (board: TicTacToeBoardState) => {
   }, []);
 };
 
-const minimax = (
-  board: TicTacToeBoardState,
-  aiMarker: Marker,
-  depth: number,
-  isMax: boolean,
-): number => {
+type MinimaxParameter = {
+  board: TicTacToeBoardState;
+  aiMarker: Marker;
+  depth: number;
+  depthLimit?: number;
+  isMax: boolean;
+};
+
+const minimax = ({
+  board,
+  aiMarker,
+  depth,
+  depthLimit = Infinity,
+  isMax,
+}: MinimaxParameter): number => {
   const opponentMarker: Marker = aiMarker === "x" ? "o" : "x";
 
   if (getWinningLines(board, aiMarker).length) return 10 - depth;
   if (getWinningLines(board, opponentMarker).length) return -10 + depth;
   if (!getEmptyIndexes(board).length) return 0;
+
+  if (depth > depthLimit) return 0;
 
   // evaluate my marker (max)
   if (isMax) {
@@ -28,7 +39,16 @@ const minimax = (
     for (let i = 0; i < 9; i++) {
       if (board[i] === "") {
         board[i] = aiMarker;
-        best = Math.max(best, minimax(board, aiMarker, depth + 1, false));
+        best = Math.max(
+          best,
+          minimax({
+            board: board,
+            aiMarker: aiMarker,
+            depth: depth + 1,
+            depthLimit: depthLimit,
+            isMax: false,
+          }),
+        );
         board[i] = "";
       }
     }
@@ -39,7 +59,16 @@ const minimax = (
     for (let i = 0; i < 9; i++) {
       if (board[i] === "") {
         board[i] = opponentMarker;
-        best = Math.min(best, minimax(board, aiMarker, depth + 1, true));
+        best = Math.min(
+          best,
+          minimax({
+            board: board,
+            aiMarker: aiMarker,
+            depth: depth + 1,
+            depthLimit: depthLimit,
+            isMax: true,
+          }),
+        );
         board[i] = "";
       }
     }
@@ -47,14 +76,24 @@ const minimax = (
   }
 };
 
-const findBestMove = (board: TicTacToeBoardState, aiMarker: Marker): number => {
+const findBestMove = (
+  board: TicTacToeBoardState,
+  aiMarker: Marker,
+  depthLimit?: number,
+): number => {
   let bestVal: number = -1000;
   let bestMove: number = -1;
 
   for (let i = 0; i < 9; i++) {
     if (board[i] === "") {
       board[i] = aiMarker;
-      let moveVal = minimax(board, aiMarker, 0, false);
+      let moveVal = minimax({
+        board: board,
+        aiMarker: aiMarker,
+        depth: 0,
+        depthLimit: depthLimit,
+        isMax: false,
+      });
       board[i] = "";
       if (moveVal > bestVal) {
         bestMove = i;
@@ -67,11 +106,15 @@ const findBestMove = (board: TicTacToeBoardState, aiMarker: Marker): number => {
 };
 
 workerContext.onmessage = (
-  e: MessageEvent<{ board: TicTacToeBoardState; aiMarker: Marker }>,
+  e: MessageEvent<{
+    board: TicTacToeBoardState;
+    aiMarker: Marker;
+    depthLimit?: number;
+  }>,
 ) => {
-  const { board, aiMarker } = e.data;
+  const { board, aiMarker, depthLimit } = e.data;
   const opponentMarker: Marker = aiMarker === "x" ? "o" : "x";
-  const bestMove = findBestMove(board, aiMarker);
+  const bestMove = findBestMove(board, aiMarker, depthLimit ?? Infinity);
 
   // a bug fix to prevent the AI from making a move milliseconds
   // before the game over state changes to true
