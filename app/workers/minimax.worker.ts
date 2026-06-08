@@ -1,5 +1,6 @@
-import type { Marker, TicTacToeBoardState } from "~/types/game";
-import { getWinningLines } from "~/utils/gameLogic";
+// avoid import using tilde (~) in webworker for deployment purposes
+import type { Marker, TicTacToeBoardState } from "../types/game";
+import { getWinningLines } from "../utils/gameLogic";
 
 const workerContext: Worker = self as any;
 
