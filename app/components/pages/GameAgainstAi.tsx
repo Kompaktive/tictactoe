@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import Button from "../atoms/Button";
 import { cn } from "~/utils/cn";
 import Scoreboard from "../organisms/Scoreboard";
-import MinimaxWorker from "../../workers/minimax.worker?worker";
 
 const GameAgainstAi = () => {
   const [isGameOver, setIsGameOver] = useState<boolean>(false);
@@ -39,7 +38,12 @@ const GameAgainstAi = () => {
   };
 
   useEffect(() => {
-    workerRef.current = new MinimaxWorker();
+    if (typeof window === "undefined") return;
+
+    workerRef.current = new Worker(
+      new URL("../workers/minimax.worker.ts", import.meta.url),
+      { type: "module" },
+    );
 
     workerRef.current.onmessage = (e: MessageEvent<{ bestMove: number }>) => {
       const { bestMove } = e.data;
