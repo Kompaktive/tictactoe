@@ -41,7 +41,7 @@ const GameAgainstAi = () => {
     if (typeof window === "undefined") return;
 
     workerRef.current = new Worker(
-      new URL("../workers/minimax.worker.ts", import.meta.url),
+      new URL("../../workers/minimax.worker.ts", import.meta.url),
       { type: "module" },
     );
 
