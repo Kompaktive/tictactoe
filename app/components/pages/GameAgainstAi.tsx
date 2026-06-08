@@ -29,6 +29,15 @@ const GameAgainstAi = () => {
 
   const workerRef = useRef<Worker>(null);
 
+  const resetGame = () => {
+    setRound((prev) => prev + 1);
+    setBoardState(["", "", "", "", "", "", "", "", ""]);
+    setCurrentTurn("x");
+    if (yourMarker === "x") setYourMarker("o");
+    else setYourMarker("x");
+    setIsGameOver(false);
+  };
+
   useEffect(() => {
     workerRef.current = new MinimaxWorker();
 
@@ -54,25 +63,35 @@ const GameAgainstAi = () => {
     workerRef.current?.postMessage({
       board: boardState,
       aiMarker: opponentMarker,
+      depthLimit: 3,
     });
   }, [currentTurn, isGameOver, opponentMarker]);
 
   return (
     <main className="container mx-auto flex h-screen items-center justify-center">
       <div className="grow space-y-4 p-6 md:space-y-10">
-        <Scoreboard
-          round={round}
-          host={{
-            nickname: "You",
-            marker: yourMarker,
-            score: yourScore,
-          }}
-          guest={{
-            nickname: "Opponent AI",
-            marker: opponentMarker,
-            score: opponentScore,
-          }}
-        />
+        <section className="space-y-2">
+          <div>
+            <div>
+              *Click to change the difficulty. Changing it will reset the game!
+            </div>
+            <Button>Normal</Button>
+          </div>
+
+          <Scoreboard
+            round={round}
+            host={{
+              nickname: "You",
+              marker: yourMarker,
+              score: yourScore,
+            }}
+            guest={{
+              nickname: "Opponent AI",
+              marker: opponentMarker,
+              score: opponentScore,
+            }}
+          />
+        </section>
 
         <TicTacToeBoard
           state={boardState}
@@ -94,17 +113,11 @@ const GameAgainstAi = () => {
               setOpponentScore((prev) => prev + 1);
           }}
         />
-
         <Button
           className={cn(!isGameOver && "invisible")}
           disabled={!isGameOver}
           onClick={() => {
-            setRound((prev) => prev + 1);
-            setBoardState(["", "", "", "", "", "", "", "", ""]);
-            setCurrentTurn("x");
-            if (yourMarker === "x") setYourMarker("o");
-            else setYourMarker("x");
-            setIsGameOver(false);
+            resetGame();
           }}
         >
           Rematch
