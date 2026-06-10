@@ -13,6 +13,11 @@ import Navbar from "./components/organisms/Navbar";
 import { CookiesProvider } from "react-cookie";
 
 export const links: Route.LinksFunction = () => [
+  {
+    rel: "icon",
+    href: "/favicon.png",
+    type: "image/png",
+  },
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
   {
     rel: "preconnect",
