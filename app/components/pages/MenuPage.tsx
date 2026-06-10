@@ -5,7 +5,7 @@ import useNicknameStore from "~/stores/useNicknameStore";
 import useMenuNavigationHistoryStore from "~/stores/useMenuNavigationHistoryStore";
 import PlayWithFriendMenu from "../organisms/menus/PlayWithFriendMenu";
 
-const Menu = () => {
+const MenuPage = () => {
   const { menuNavigationHistory, pushMenuNavigationHistory } =
     useMenuNavigationHistoryStore();
   const { nickname, setNickname } = useNicknameStore();
@@ -14,19 +14,17 @@ const Menu = () => {
 
   return (
     <main className="mx-8 flex h-screen flex-col items-center justify-center">
-      <div className="container w-full">
-        <label className="relative">
-          <span className="absolute -top-8">Enter your nickname</span>
-          <TextField
-            className="w-full"
-            value={nickname}
-            onChange={(e) => setNickname(e.target.value)}
-            spellCheck={false}
-            maxLength={15}
-          />
-        </label>
+      <div className="container space-y-2">
+        <TextField
+          className="w-full"
+          placeholder="Enter your nickname"
+          value={nickname}
+          onChange={(e) => setNickname(e.target.value)}
+          spellCheck={false}
+          maxLength={15}
+        />
 
-        <section className="mt-12">
+        <section>
           {/* main menu */}
           {!menuNavigationHistory.length && (
             <div className="space-y-2">
@@ -49,4 +47,4 @@ const Menu = () => {
   );
 };
 
-export default Menu;
+export default MenuPage;
