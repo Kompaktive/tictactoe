@@ -8,7 +8,13 @@ export const TicTacToeIcon = ({
   ...props
 }: HTMLMotionProps<"div">) => {
   return (
-    <motion.div className={cn("grid grid-cols-2", className)} {...props}>
+    <motion.div
+      className={cn(
+        "pointer-events-none grid grid-cols-2 select-none",
+        className,
+      )}
+      {...props}
+    >
       <div className="border-r border-b">
         <XMarker className="stroke-accent-1 animate-pulse" />
       </div>
