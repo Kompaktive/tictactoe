@@ -41,7 +41,7 @@ const TicTacToeBoard = ({ state, onClickCell, onGameOver }: Props) => {
   }, [state]);
 
   return (
-    <section className="bg-secondary min-w-5xs grid aspect-square grow grid-cols-3 items-center justify-center gap-2 overflow-hidden">
+    <section className="bg-secondary min-w-5xs grid aspect-square grid-cols-3 items-center justify-center gap-2 overflow-hidden">
       {state.map((marker, index) => (
         <button
           key={`square-${index}`}
