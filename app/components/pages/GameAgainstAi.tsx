@@ -72,61 +72,50 @@ const GameAgainstAi = () => {
   }, [currentTurn, isGameOver, opponentMarker]);
 
   return (
-    <main className="container mx-auto flex h-screen items-center justify-center">
-      <div className="grow space-y-4 p-6 md:space-y-10">
-        <section className="space-y-2">
-          <div>
-            <div>
-              *Click to change the difficulty. Changing it will reset the game!
-            </div>
-            <Button>Normal</Button>
-          </div>
+    <main className="flex grow flex-col justify-center space-y-2 overflow-x-clip px-8">
+      <Scoreboard
+        round={round}
+        host={{
+          nickname: "You",
+          marker: yourMarker,
+          score: yourScore,
+        }}
+        guest={{
+          nickname: "Opponent AI",
+          marker: opponentMarker,
+          score: opponentScore,
+        }}
+      />
 
-          <Scoreboard
-            round={round}
-            host={{
-              nickname: "You",
-              marker: yourMarker,
-              score: yourScore,
-            }}
-            guest={{
-              nickname: "Opponent AI",
-              marker: opponentMarker,
-              score: opponentScore,
-            }}
-          />
-        </section>
+      <TicTacToeBoard
+        state={boardState}
+        onClickCell={async (cellIndex) => {
+          if (currentTurn !== yourMarker || isGameOver) return;
 
-        <TicTacToeBoard
-          state={boardState}
-          onClickCell={async (cellIndex) => {
-            if (currentTurn !== yourMarker || isGameOver) return;
+          setBoardState((prev) => {
+            const nextItems: TicTacToeBoardState = [...prev];
+            nextItems[cellIndex] = currentTurn;
+            return nextItems;
+          });
+          setCurrentTurn(opponentMarker);
+        }}
+        onGameOver={async (result) => {
+          setIsGameOver(true);
 
-            setBoardState((prev) => {
-              const nextItems: TicTacToeBoardState = [...prev];
-              nextItems[cellIndex] = currentTurn;
-              return nextItems;
-            });
-            setCurrentTurn(opponentMarker);
-          }}
-          onGameOver={async (result) => {
-            setIsGameOver(true);
-
-            if (result.winner === yourMarker) setYourScore((prev) => prev + 1);
-            if (result.winner === opponentMarker)
-              setOpponentScore((prev) => prev + 1);
-          }}
-        />
-        <Button
-          className={cn(!isGameOver && "invisible")}
-          disabled={!isGameOver}
-          onClick={() => {
-            resetGame();
-          }}
-        >
-          Rematch
-        </Button>
-      </div>
+          if (result.winner === yourMarker) setYourScore((prev) => prev + 1);
+          if (result.winner === opponentMarker)
+            setOpponentScore((prev) => prev + 1);
+        }}
+      />
+      <Button
+        className={cn(!isGameOver && "invisible")}
+        disabled={!isGameOver}
+        onClick={() => {
+          resetGame();
+        }}
+      >
+        Rematch
+      </Button>
     </main>
   );
 };
