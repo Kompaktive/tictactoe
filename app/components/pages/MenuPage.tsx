@@ -16,7 +16,7 @@ const MenuPage = () => {
 
   return (
     <main className="flex grow flex-col justify-center space-y-2 overflow-x-clip px-8">
-      <header className="text-72 font-google relative mb-24 py-12 text-center leading-14 font-black">
+      <header className="text-72 font-google relative pb-12 text-center leading-14 font-black">
         <TicTacToeIcon
           initial={{ scale: 0.9, opacity: 0, rotate: -180 }}
           animate={{ scale: 1, opacity: 0.1, rotate: -186 }}
