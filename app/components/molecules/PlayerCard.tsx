@@ -1,24 +1,28 @@
 import type { Marker } from "~/types/game";
 import OMarker from "../atoms/icons/OMarker";
 import XMarker from "../atoms/icons/XMarker";
+import { cn } from "~/utils/cn";
 
 type Props = {
   marker: Marker;
   nickname: string;
+  rtl?: boolean;
 };
 
-const PlayerCard = ({ nickname, marker }: Props) => {
+const PlayerCard = ({ nickname, marker, rtl }: Props) => {
   return (
-    <div className="bg-dark flex flex-col justify-between rounded-xl p-2 text-center text-white">
-      <span className="text-20 block font-medium wrap-break-word">
-        {nickname}
-      </span>
-
-      <div className="flex items-center justify-center">
-        <div className="size-12">
-          {marker === "x" ? <XMarker /> : <OMarker />}
-        </div>
-      </div>
+    <div
+      className={cn(
+        "flex flex-1 items-center gap-2 truncate",
+        rtl && "flex-row-reverse",
+      )}
+    >
+      {marker === "o" ? (
+        <OMarker className="size-10 shrink-0 md:size-16" />
+      ) : (
+        <XMarker className="size-10 shrink-0 md:size-16" />
+      )}
+      <span className="truncate text-white">{nickname}</span>
     </div>
   );
 };
