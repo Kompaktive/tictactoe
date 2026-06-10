@@ -52,8 +52,8 @@ const TicTacToeBoard = ({ state, onClickCell, onGameOver }: Props) => {
             onClickCell(index);
           }}
         >
-          {marker === "x" && <XMarker className="stroke-accent-1" />}
-          {marker === "o" && <OMarker className="stroke-accent-2" />}
+          {marker === "x" && <XMarker />}
+          {marker === "o" && <OMarker />}
         </button>
       ))}
     </section>

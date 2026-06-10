@@ -7,7 +7,10 @@ const XMarker = ({ className, ...props }: ComponentProps<"svg">) => {
       viewBox="0 0 100 100"
       xmlns="http://www.w3.org/2000/svg"
       preserveAspectRatio="xMidYMid meet"
-      className={cn("stroke-white stroke-12 [stroke-linecap:butt]", className)}
+      className={cn(
+        "stroke-accent-1 stroke-12 [stroke-linecap:butt]",
+        className,
+      )}
       {...props}
     >
       <line x1="20" y1="20" x2="80" y2="80" />

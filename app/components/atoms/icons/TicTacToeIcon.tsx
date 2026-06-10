@@ -16,16 +16,16 @@ export const TicTacToeIcon = ({
       {...props}
     >
       <div className="border-r border-b">
-        <XMarker className="stroke-accent-1 animate-pulse" />
+        <XMarker className="animate-pulse" />
       </div>
       <div>
-        <OMarker className="stroke-accent-2 animate-pulse border-b border-l [animation-delay:1000ms]" />
+        <OMarker className="animate-pulse border-b border-l [animation-delay:1000ms]" />
       </div>
       <div>
-        <OMarker className="stroke-accent-2 animate-pulse border-t border-r [animation-delay:500ms]" />
+        <OMarker className="animate-pulse border-t border-r [animation-delay:500ms]" />
       </div>
       <div>
-        <XMarker className="stroke-accent-1 animate-pulse border-t border-l [animation-delay:1500ms]" />
+        <XMarker className="animate-pulse border-t border-l [animation-delay:1500ms]" />
       </div>
     </motion.div>
   );

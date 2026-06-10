@@ -7,7 +7,7 @@ const OMarker = ({ className, ...props }: ComponentProps<"svg">) => {
       viewBox="0 0 100 100"
       xmlns="http://www.w3.org/2000/svg"
       preserveAspectRatio="xMidYMid meet"
-      className={cn("fill-none stroke-white stroke-12", className)}
+      className={cn("stroke-accent-2 fill-none stroke-12", className)}
       {...props}
     >
       <circle cx="50" cy="50" r="35" />
