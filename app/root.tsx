@@ -34,6 +34,11 @@ export const links: Route.LinksFunction = () => [
     rel: "stylesheet",
     href: "https://fonts.googleapis.com/css2?family=Teachers:ital,wght@0,400..800;1,400..800&display=swap",
   },
+  {
+    // Google Sans Flex
+    rel: "stylesheet",
+    href: "https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap",
+  },
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
