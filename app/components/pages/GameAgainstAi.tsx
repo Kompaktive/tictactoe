@@ -72,7 +72,7 @@ const GameAgainstAi = () => {
   }, [currentTurn, isGameOver, opponentMarker]);
 
   return (
-    <main className="flex grow flex-col justify-center space-y-2 overflow-x-clip px-8">
+    <main className="flex grow flex-col justify-center space-y-8 px-8">
       <Scoreboard
         round={round}
         host={{
