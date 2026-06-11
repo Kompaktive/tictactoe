@@ -1,9 +1,19 @@
 import { useEffect, useState } from "react";
 import type { Marker, TicTacToeBoardState } from "~/types/game";
-import { getWinningLines } from "~/utils/gameLogic";
+import {
+  getWinningLines,
+  setLinePosition,
+  setLineWidth,
+} from "~/utils/gameLogic";
 import XMarker from "../atoms/icons/XMarker";
 import OMarker from "../atoms/icons/OMarker";
-import { motion } from "motion/react";
+import {
+  AnimatePresence,
+  motion,
+  useAnimate,
+  type AnimationScope,
+} from "motion/react";
+import { cn } from "~/utils/cn";
 
 type GameOver = {
   winner: Marker;
@@ -43,7 +53,7 @@ const TicTacToeBoard = ({ state, onClickCell, onGameOver }: Props) => {
 
   return (
     <motion.section
-      className="min-w-5xs grid aspect-square grid-cols-3 items-center justify-center overflow-hidden"
+      className="min-w-5xs relative grid aspect-square grid-cols-3 items-center justify-center"
       initial={{ opacity: 0, translateY: 10 }}
       animate={{ opacity: 1, translateY: 0 }}
       transition={{
@@ -54,16 +64,41 @@ const TicTacToeBoard = ({ state, onClickCell, onGameOver }: Props) => {
         <button
           key={`square-${index}`}
           type="button"
-          className="border-secondary aspect-square w-full cursor-pointer border-t-2 border-l-2 p-1 disabled:cursor-default nth-[-n+3]:border-t-0 nth-[3n+1]:border-l-0"
+          className="border-secondary relative aspect-square w-full cursor-pointer border-t-2 border-l-2 p-1 disabled:cursor-default nth-[-n+3]:border-t-0 nth-[3n+1]:border-l-0"
           disabled={!!marker || isGameOver}
           onClick={() => {
             onClickCell(index);
           }}
         >
-          {marker === "x" && <XMarker enableAnimation />}
-          {marker === "o" && <OMarker enableAnimation />}
+          {marker === "x" && (
+            <XMarker
+              className="absolute top-1/2 left-1/2 -translate-1/2"
+              enableAnimation
+            />
+          )}
+          {marker === "o" && (
+            <OMarker
+              className="absolute top-1/2 left-1/2 -translate-1/2"
+              enableAnimation
+            />
+          )}
         </button>
       ))}
+
+      {/* line */}
+      <AnimatePresence>
+        {isGameOver && (
+          <motion.div
+            className={cn(
+              setLinePosition(state),
+              "pointer-events-none absolute h-2 origin-[left_center] rounded-full bg-white select-none",
+            )}
+            initial={{ width: 0 }}
+            animate={{ width: setLineWidth(state) }}
+            transition={{ duration: 0.3 }}
+          />
+        )}
+      </AnimatePresence>
     </motion.section>
   );
 };
