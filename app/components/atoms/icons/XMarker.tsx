@@ -1,7 +1,12 @@
+import { motion } from "motion/react";
 import type { ComponentProps } from "react";
 import { cn } from "~/utils/cn";
 
-const XMarker = ({ className, ...props }: ComponentProps<"svg">) => {
+type XMarkerProps = {
+  enableAnimation?: boolean;
+} & ComponentProps<"svg">;
+
+const XMarker = ({ enableAnimation, className, ...props }: XMarkerProps) => {
   return (
     <svg
       viewBox="0 0 100 100"
@@ -13,9 +18,43 @@ const XMarker = ({ className, ...props }: ComponentProps<"svg">) => {
       )}
       {...props}
     >
-      <line x1="20" y1="20" x2="80" y2="80" />
-
-      <line x1="80" y1="20" x2="20" y2="80" />
+      <motion.line
+        x1="20"
+        y1="20"
+        x2="80"
+        y2="80"
+        initial={enableAnimation && { pathLength: 0 }}
+        animate={
+          enableAnimation && {
+            pathLength: 1,
+            transition: {
+              pathLength: {
+                type: "spring",
+                duration: 0.2,
+              },
+            },
+          }
+        }
+      />
+      <motion.line
+        x1="80"
+        y1="20"
+        x2="20"
+        y2="80"
+        initial={enableAnimation && { pathLength: 0 }}
+        animate={
+          enableAnimation && {
+            pathLength: 1,
+            transition: {
+              pathLength: {
+                delay: 0.1,
+                type: "spring",
+                duration: 0.2,
+              },
+            },
+          }
+        }
+      />
     </svg>
   );
 };
