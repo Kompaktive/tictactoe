@@ -3,6 +3,7 @@ import type { Marker, TicTacToeBoardState } from "~/types/game";
 import { getWinningLines } from "~/utils/gameLogic";
 import XMarker from "../atoms/icons/XMarker";
 import OMarker from "../atoms/icons/OMarker";
+import { motion } from "motion/react";
 
 type GameOver = {
   winner: Marker;
@@ -41,12 +42,19 @@ const TicTacToeBoard = ({ state, onClickCell, onGameOver }: Props) => {
   }, [state]);
 
   return (
-    <section className="bg-secondary min-w-5xs grid aspect-square grid-cols-3 items-center justify-center gap-2 overflow-hidden">
+    <motion.section
+      className="min-w-5xs grid aspect-square grid-cols-3 items-center justify-center overflow-hidden"
+      initial={{ opacity: 0, translateY: 10 }}
+      animate={{ opacity: 1, translateY: 0 }}
+      transition={{
+        duration: 0.5,
+      }}
+    >
       {state.map((marker, index) => (
         <button
           key={`square-${index}`}
           type="button"
-          className="bg-primary aspect-square w-full cursor-pointer p-1 disabled:cursor-default"
+          className="border-secondary aspect-square w-full cursor-pointer border-t-2 border-l-2 p-1 disabled:cursor-default nth-[-n+3]:border-t-0 nth-[3n+1]:border-l-0"
           disabled={!!marker || isGameOver}
           onClick={() => {
             onClickCell(index);
@@ -56,7 +64,7 @@ const TicTacToeBoard = ({ state, onClickCell, onGameOver }: Props) => {
           {marker === "o" && <OMarker enableAnimation />}
         </button>
       ))}
-    </section>
+    </motion.section>
   );
 };
 

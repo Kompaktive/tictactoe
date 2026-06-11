@@ -1,7 +1,6 @@
+import { motion } from "motion/react";
 import type { Marker } from "~/types/game";
 import PlayerCard from "../molecules/PlayerCard";
-import OMarker from "../atoms/icons/OMarker";
-import XMarker from "../atoms/icons/XMarker";
 
 type PlayerScore = {
   nickname: string;
@@ -17,7 +16,14 @@ type Props = {
 
 const Scoreboard = ({ round, host, guest }: Props) => {
   return (
-    <section className="font-google grid grid-cols-3 gap-2">
+    <motion.section
+      className="font-google grid grid-cols-3 gap-2"
+      initial={{ opacity: 0, translateY: -10 }}
+      animate={{ opacity: 1, translateY: 0 }}
+      transition={{
+        duration: 0.5,
+      }}
+    >
       <div className="bg-secondary col-span-3 flex items-center justify-between gap-4 rounded-xl p-2">
         <PlayerCard marker={host.marker} nickname={host.nickname} />
         <span className="text-24 md:text-32 font-bold text-white">vs</span>
@@ -34,7 +40,7 @@ const Scoreboard = ({ round, host, guest }: Props) => {
       <div className="bg-secondary text-32 flex items-center justify-center rounded-xl p-2 font-bold">
         {guest.score}
       </div>
-    </section>
+    </motion.section>
   );
 };
 
