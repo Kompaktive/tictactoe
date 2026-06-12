@@ -9,7 +9,7 @@ const Navbar = () => {
         className="hover:text-accent-2 flex items-center gap-2 transition duration-150 hover:cursor-pointer"
       >
         <MdHome size={20} />
-        Back to Main Menu
+        Main Menu
       </Link>
       <div>Github</div>
     </nav>
