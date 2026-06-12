@@ -38,6 +38,7 @@ const GameTemplate = ({ roomId, session, role }: Props) => {
         <Scoreboard
           round={session.round}
           currentTurn={session.turn}
+          isGameOver={session.status === "completed"}
           host={{
             nickname: playedAsGuest ? session.guest_name : session.host_name,
             marker: isSpectator

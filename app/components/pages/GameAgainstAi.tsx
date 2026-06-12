@@ -93,6 +93,7 @@ const GameAgainstAi = () => {
       <Scoreboard
         round={round}
         currentTurn={currentTurn}
+        isGameOver={isGameOver}
         host={{
           nickname: "You",
           marker: yourMarker,

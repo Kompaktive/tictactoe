@@ -11,11 +11,12 @@ type PlayerScore = {
 type Props = {
   round: number;
   currentTurn: Marker;
+  isGameOver?: boolean;
   host: PlayerScore;
   guest: PlayerScore;
 };
 
-const Scoreboard = ({ round, currentTurn, host, guest }: Props) => {
+const Scoreboard = ({ round, currentTurn, isGameOver, host, guest }: Props) => {
   return (
     <motion.section
       className="font-google grid grid-cols-3 gap-2"
@@ -29,13 +30,13 @@ const Scoreboard = ({ round, currentTurn, host, guest }: Props) => {
         <PlayerCard
           marker={host.marker}
           nickname={host.nickname}
-          highlight={currentTurn === host.marker}
+          highlight={currentTurn === host.marker && !isGameOver}
         />
         <span className="text-20 md:text-32 font-medium text-white">vs</span>
         <PlayerCard
           marker={guest.marker}
           nickname={guest.nickname}
-          highlight={currentTurn === guest.marker}
+          highlight={currentTurn === guest.marker && !isGameOver}
           rtl
         />
       </div>
