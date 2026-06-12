@@ -10,7 +10,7 @@ const GameAgainstAi = () => {
   const [yourScore, setYourScore] = useState<number>(0);
   const [opponentScore, setOpponentScore] = useState<number>(0);
 
-  const depthLimits: number[] = [1, 3, 4, Infinity];
+  const depthLimits: number[] = [1, 3, Infinity];
   const [selectedDepthLimit, setSelectedDepthLimit] = useState<number>(0);
 
   const translateDifficulty = (): string => {
@@ -19,8 +19,6 @@ const GameAgainstAi = () => {
         return "Normal";
       case 3:
         return "Hard";
-      case 4:
-        return "Insane";
       case Infinity:
         return "Impossible";
       default:
