@@ -20,9 +20,9 @@ const PlayerCard = ({ nickname, marker, rtl, highlight }: Props) => {
       )}
     >
       {marker === "o" ? (
-        <OMarker className="size-10 shrink-0 md:size-16" />
+        <OMarker className="size-8 shrink md:size-16" />
       ) : (
-        <XMarker className="size-10 shrink-0 md:size-16" />
+        <XMarker className="size-8 shrink md:size-16" />
       )}
       <span className="truncate text-white">{nickname}</span>
     </div>
