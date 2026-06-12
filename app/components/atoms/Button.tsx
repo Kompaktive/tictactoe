@@ -14,7 +14,7 @@ const Button = ({
     <button
       type="button"
       className={cn(
-        "bg-accent-2 text-primary w-full rounded-xl p-4 font-medium hover:cursor-pointer",
+        "bg-accent-2 disabled:bg-secondary hover:bg-accent-1 text-primary w-full rounded-xl p-4 font-medium transition duration-150 hover:cursor-pointer disabled:cursor-default",
         className,
       )}
       {...props}
