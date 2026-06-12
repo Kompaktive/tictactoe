@@ -127,7 +127,7 @@ const GameAgainstAi = () => {
 
       <div className="flex items-center gap-2">
         <Button
-          className="text-accent-2 border-accent-2 hover:border-accent-1 hover:text-accent-1 border bg-transparent py-2 hover:bg-transparent"
+          className="text-accent-1 border-accent-1 hover:border-accent-2 hover:text-accent-2 border bg-transparent py-2 hover:bg-transparent"
           onClick={() => {
             console.log(depthLimits[selectedDepthLimit]);
             setSelectedDepthLimit((prev) => (prev + 1) % depthLimits.length);
