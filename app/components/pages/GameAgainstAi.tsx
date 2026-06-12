@@ -2,7 +2,6 @@ import { type TicTacToeBoardState, type Marker } from "~/types/game";
 import TicTacToeBoard from "../organisms/TicTacToeBoard";
 import { useEffect, useRef, useState } from "react";
 import Button from "../atoms/Button";
-import { cn } from "~/utils/cn";
 import Scoreboard from "../organisms/Scoreboard";
 
 const GameAgainstAi = () => {
@@ -10,7 +9,24 @@ const GameAgainstAi = () => {
   const [round, setRound] = useState<number>(1);
   const [yourScore, setYourScore] = useState<number>(0);
   const [opponentScore, setOpponentScore] = useState<number>(0);
-  const [depthLimit, setDepthLimit] = useState<number>(Infinity);
+
+  const depthLimits: number[] = [1, 3, 4, Infinity];
+  const [selectedDepthLimit, setSelectedDepthLimit] = useState<number>(0);
+
+  const translateDifficulty = (): string => {
+    switch (depthLimits[selectedDepthLimit]) {
+      case 1:
+        return "Normal";
+      case 3:
+        return "Hard";
+      case 4:
+        return "Insane";
+      case Infinity:
+        return "Impossible";
+      default:
+        return "Unknown";
+    }
+  };
 
   const [boardState, setBoardState] = useState<TicTacToeBoardState>([
     "",
@@ -68,9 +84,9 @@ const GameAgainstAi = () => {
     workerRef.current?.postMessage({
       board: boardState,
       aiMarker: opponentMarker,
-      depthLimit: depthLimit,
+      depthLimit: depthLimits[selectedDepthLimit],
     });
-  }, [currentTurn, isGameOver, opponentMarker]);
+  }, [currentTurn, isGameOver, opponentMarker, selectedDepthLimit]);
 
   return (
     <main className="flex grow flex-col justify-center space-y-8 px-8">
@@ -109,15 +125,25 @@ const GameAgainstAi = () => {
             setOpponentScore((prev) => prev + 1);
         }}
       />
-      <Button
-        className={cn(!isGameOver && "invisible", "py-2")}
-        disabled={!isGameOver}
-        onClick={() => {
-          resetGame();
-        }}
-      >
-        Rematch
-      </Button>
+
+      <div className="flex items-center gap-2">
+        <Button
+          className="text-accent-1 border-accent-1 border bg-transparent py-2"
+          onClick={() => {
+            console.log(depthLimits[selectedDepthLimit]);
+            setSelectedDepthLimit((prev) => (prev + 1) % depthLimits.length);
+          }}
+        >
+          AI: {translateDifficulty()}
+        </Button>
+        <Button
+          className="py-2"
+          disabled={!isGameOver}
+          onClick={() => resetGame()}
+        >
+          Replay
+        </Button>
+      </div>
     </main>
   );
 };
