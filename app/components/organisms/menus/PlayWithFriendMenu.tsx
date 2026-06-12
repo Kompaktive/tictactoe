@@ -104,10 +104,15 @@ const PlayWithFriendMenu = () => {
   };
 
   return (
-    <>
-      <div className="space-y-2">
-        <Button onClick={() => createRoom()}>Create a room</Button>
+    <div className="space-y-2">
+      <Button onClick={() => createRoom()}>Create a room</Button>
+
+      <span className="block text-center">- or -</span>
+
+      <div className="flex gap-2">
         <TextField
+          placeholder="Enter room code"
+          maxLength={8}
           value={roomCodeInput}
           onChange={(e) => setRoomCodeInput(e.target.value)}
           spellCheck={false}
@@ -117,10 +122,10 @@ const PlayWithFriendMenu = () => {
         </Button>
       </div>
 
-      <Button className="mt-8" onClick={() => popMenuNavigationHistory()}>
+      <Button className="mt-10" onClick={() => popMenuNavigationHistory()}>
         Back
       </Button>
-    </>
+    </div>
   );
 };
 
