@@ -83,6 +83,7 @@ const findBestMove = (
 ): number => {
   let bestVal: number = -1000;
   let bestMove: number = -1;
+  let bestMoves: { cell: number; eval: number }[] = []; // store multiple best moves
 
   for (let i = 0; i < 9; i++) {
     if (board[i] === "") {
@@ -95,14 +96,31 @@ const findBestMove = (
         isMax: false,
       });
       board[i] = "";
-      if (moveVal > bestVal) {
+      if (moveVal >= bestVal) {
         bestMove = i;
         bestVal = moveVal;
-        console.log("cell", bestMove, "eval:", moveVal);
+        // console.log("cell", bestMove, "eval:", moveVal);
+
+        bestMoves.push({ cell: bestMove, eval: bestVal });
+        // console.log("best moves:", bestMoves);
+        if (bestMoves.length) {
+          for (let i = 0; i < bestMoves.length; i++) {
+            if (bestVal > bestMoves[i].eval) {
+              bestMoves.length = 0;
+              bestMoves.push({ cell: bestMove, eval: bestVal });
+              // console.log("reset best moves:", bestMoves);
+              break;
+            }
+          }
+        }
       }
     }
   }
-  return bestMove;
+
+  // select best move randomly (if there is multiple) to make the game less boring
+  return !bestMoves.length
+    ? bestMove
+    : bestMoves[Math.floor(Math.random() * bestMoves.length)].cell;
 };
 
 workerContext.onmessage = (
