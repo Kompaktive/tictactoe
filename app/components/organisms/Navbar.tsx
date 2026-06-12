@@ -1,5 +1,6 @@
-import { MdHome } from "react-icons/md";
 import { Link } from "react-router";
+import { MdHome } from "react-icons/md";
+import { FaGithub } from "react-icons/fa";
 
 const Navbar = () => {
   return (
@@ -11,7 +12,16 @@ const Navbar = () => {
         <MdHome size={20} />
         Main Menu
       </Link>
-      <div>Github</div>
+
+      <a
+        href="https://github.com/Kompaktive/tictactoe"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="hover:text-accent-2 flex items-center gap-2 transition duration-150 hover:cursor-pointer"
+      >
+        <FaGithub size={20} className="-translate-y-px" />
+        <span>Github</span>
+      </a>
     </nav>
   );
 };
