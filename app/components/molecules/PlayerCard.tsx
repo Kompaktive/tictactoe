@@ -7,14 +7,16 @@ type Props = {
   marker: Marker;
   nickname: string;
   rtl?: boolean;
+  highlight?: boolean;
 };
 
-const PlayerCard = ({ nickname, marker, rtl }: Props) => {
+const PlayerCard = ({ nickname, marker, rtl, highlight }: Props) => {
   return (
     <div
       className={cn(
-        "flex flex-1 items-center gap-2 truncate",
+        "flex flex-1 items-center gap-2 truncate rounded-xl border p-1 transition duration-100",
         rtl && "flex-row-reverse",
+        highlight ? "border-accent-1" : "border-transparent",
       )}
     >
       {marker === "o" ? (

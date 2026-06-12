@@ -10,11 +10,12 @@ type PlayerScore = {
 
 type Props = {
   round: number;
+  currentTurn: Marker;
   host: PlayerScore;
   guest: PlayerScore;
 };
 
-const Scoreboard = ({ round, host, guest }: Props) => {
+const Scoreboard = ({ round, currentTurn, host, guest }: Props) => {
   return (
     <motion.section
       className="font-google grid grid-cols-3 gap-2"
@@ -25,9 +26,18 @@ const Scoreboard = ({ round, host, guest }: Props) => {
       }}
     >
       <div className="bg-secondary col-span-3 flex items-center justify-between gap-4 rounded-xl p-2">
-        <PlayerCard marker={host.marker} nickname={host.nickname} />
-        <span className="text-24 md:text-32 font-bold text-white">vs</span>
-        <PlayerCard marker={guest.marker} nickname={guest.nickname} rtl />
+        <PlayerCard
+          marker={host.marker}
+          nickname={host.nickname}
+          highlight={currentTurn === host.marker}
+        />
+        <span className="text-20 md:text-32 font-medium text-white">vs</span>
+        <PlayerCard
+          marker={guest.marker}
+          nickname={guest.nickname}
+          highlight={currentTurn === guest.marker}
+          rtl
+        />
       </div>
 
       <div className="bg-secondary text-32 flex items-center justify-center rounded-xl p-2 font-bold">

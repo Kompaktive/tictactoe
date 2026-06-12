@@ -37,6 +37,7 @@ const GameTemplate = ({ roomId, session, role }: Props) => {
       <div className="grow space-y-4 p-6 md:space-y-10">
         <Scoreboard
           round={session.round}
+          currentTurn={session.turn}
           host={{
             nickname: playedAsGuest ? session.guest_name : session.host_name,
             marker: isSpectator

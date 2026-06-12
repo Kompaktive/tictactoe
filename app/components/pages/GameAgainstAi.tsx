@@ -10,6 +10,7 @@ const GameAgainstAi = () => {
   const [round, setRound] = useState<number>(1);
   const [yourScore, setYourScore] = useState<number>(0);
   const [opponentScore, setOpponentScore] = useState<number>(0);
+  const [depthLimit, setDepthLimit] = useState<number>(Infinity);
 
   const [boardState, setBoardState] = useState<TicTacToeBoardState>([
     "",
@@ -67,7 +68,7 @@ const GameAgainstAi = () => {
     workerRef.current?.postMessage({
       board: boardState,
       aiMarker: opponentMarker,
-      depthLimit: 3,
+      depthLimit: depthLimit,
     });
   }, [currentTurn, isGameOver, opponentMarker]);
 
@@ -75,13 +76,14 @@ const GameAgainstAi = () => {
     <main className="flex grow flex-col justify-center space-y-8 px-8">
       <Scoreboard
         round={round}
+        currentTurn={currentTurn}
         host={{
           nickname: "You",
           marker: yourMarker,
           score: yourScore,
         }}
         guest={{
-          nickname: "Opponent AI",
+          nickname: "AI",
           marker: opponentMarker,
           score: opponentScore,
         }}
@@ -108,7 +110,7 @@ const GameAgainstAi = () => {
         }}
       />
       <Button
-        className={cn(!isGameOver && "invisible")}
+        className={cn(!isGameOver && "invisible", "py-2")}
         disabled={!isGameOver}
         onClick={() => {
           resetGame();
