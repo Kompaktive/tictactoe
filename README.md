@@ -1,87 +1,58 @@
-# Welcome to React Router!
+# Realtime Tic-Tac-Toe
 
-A modern, production-ready template for building full-stack React applications using React Router.
+[![Live Demo](https://img.shields.io/badge/Demo-Live%20View-brightgreen?style=for-the-badge)](https://tictactoe-kompaktive.vercel.app/)
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
+Challenge your friend online without a hassle via link-sharing, or play against Minimax AI.
 
-## Features
+![App Screenshot](https://alfiankurniadi.vercel.app/images/thumbnails/realtime-tictactoe.webp)
 
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
+## 🌟 Features
 
-## Getting Started
+- Instant multiplayer matchmaking via room code or direct link-sharing.
+- Realtime spectator mode.
+- Play against AI powered by Minimax algorithm.
 
-### Installation
+## 🛠️ Tech Stack
 
-Install the dependencies:
+| Frontend                  | Styling / UI | Backend       | Deployment |
+| :------------------------ | :----------- | :------------ | :--------- |
+| React.js                  | Tailwind CSS | Firebase RTDB | Vercel     |
+| React Router Framework v7 | React Icons  |
+| Typescript                | Motion       |
+| Web Workers               |
 
-```bash
-npm install
-```
+## 🧠 Lessons Learned & Challenges
 
-### Development
+Building this project taught me a lot about the barrier of realtime syncing in general.
 
-Start the development server with HMR:
+### Challenge #1 • Race Conditions
 
-```bash
-npm run dev
-```
+The most common problem.. Dealing with multiple clients sending data to the database, causing unwanted data duplication and potential desync.
 
-Your application will be available at `http://localhost:5173`.
+#### The Solution
 
-## Building for Production
+Use built-in Firebase `runTransaction()` to handle concurrent actions.
 
-Create a production build:
+### Challenge #2 • Over-counting Score
 
-```bash
-npm run build
-```
+The score would be incremented multiple times based on how many client are in the room. Like in challenge #1, however, the use of `runTransaction()` is not possible because incrementing a score doesn't require any conditions that would prevent a client from doing so in the first place.
 
-## Deployment
+#### The Solution
 
-### Docker Deployment
+Restricted score writing to the winning clients only.
 
-To build and run using Docker:
+### Challenge #3 • UI Thread Blocking
 
-```bash
-docker build -t my-app .
+The website will freeze and stopped responding everytime it calculates, especially on lower-end device.
 
-# Run the container
-docker run -p 3000:3000 my-app
-```
+#### The Solution
 
-The containerized application can be deployed to any platform that supports Docker, including:
+Offloaded the minimax AI calculations to Web Workers so the calculations ran in the background instead of in the web app itself.
 
-- AWS ECS
-- Google Cloud Run
-- Azure Container Apps
-- Digital Ocean App Platform
-- Fly.io
-- Railway
+### Challenge #4 • Monotonous AI Move
 
-### DIY Deployment
+Because the Minimax AI always picked the optimal move, it often defaults to the same opening strategy.
 
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
+#### The Solution
 
-Make sure to deploy the output of `npm run build`
-
-```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
-```
-
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
-
----
-
-Built with ❤️ using React Router.
+Since TicTacToe first move is considered the best move regardless of which cell they chose, I modified the algorithm by adding an array to collect all tied 'best moves' and make the AI selects one at random.
