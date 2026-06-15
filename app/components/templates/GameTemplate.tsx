@@ -106,8 +106,10 @@ const GameTemplate = ({ roomId, session, role }: Props) => {
       />
 
       <Button
-        className={cn(session.status === "ongoing" && "invisible")}
-        disabled={session.status === "ongoing"}
+        className={cn(
+          (session.status === "ongoing" || role === "spectator") && "invisible",
+        )}
+        disabled={session.status === "ongoing" || role === "spectator"}
         onClick={() => {
           rematch(roomId, session.host_marker);
         }}
