@@ -11,6 +11,7 @@ import Button from "../atoms/Button";
 import { cn } from "~/utils/cn";
 import { getAssignedMarker } from "~/utils/onlineGameLogic";
 import Scoreboard from "../organisms/Scoreboard";
+import { toast } from "react-toastify";
 
 type Props = {
   roomId: string;
@@ -75,7 +76,9 @@ const GameTemplate = ({ roomId, session, role }: Props) => {
             currentTurn: session.turn,
           });
           if (!result.isSuccess) {
-            // TODO: pop up toast error
+            toast("Failed to add a marker. Please try again.", {
+              type: "error",
+            });
             console.error("Failed to write cell", result.error);
             setLocalBoardState(session.board);
           }

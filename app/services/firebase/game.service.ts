@@ -1,4 +1,5 @@
 import { increment, ref, update } from "firebase/database";
+import { toast } from "react-toastify";
 import { database } from "~/firebase";
 import type { GameSession, Marker } from "~/types/game";
 
@@ -44,6 +45,7 @@ export const endMatch = async (
     await update(ref(database), updates);
     return { isSuccess: true };
   } catch (error) {
+    toast("Failed to update score.", { type: "error" });
     return { isSuccess: false, error };
   }
 };
@@ -62,6 +64,7 @@ export const rematch = async (roomId: string, currentHostMarker: Marker) => {
     await update(ref(database), updates);
     return { isSuccess: true };
   } catch (error) {
+    toast("Failed to rematch.", { type: "error" });
     return { isSuccess: false, error };
   }
 };

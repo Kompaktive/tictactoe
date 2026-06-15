@@ -6,6 +6,7 @@ import {
 } from "firebase/database";
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
 import Button from "~/components/atoms/Button";
 import TextField from "~/components/atoms/TextField";
 import { database } from "~/firebase";
@@ -38,8 +39,7 @@ const PlayWithFriendMenu = () => {
     const MAX_ATTEMPTS: number = 10;
 
     if (attempt >= MAX_ATTEMPTS) {
-      // TODO: display max attempts error toast "server is too busy. Please try again later"
-      console.error("MAX ATTEMPTS REACHED");
+      toast("Server is too busy. Please try again later!", { type: "error" });
       return;
     }
 
@@ -64,8 +64,8 @@ const PlayWithFriendMenu = () => {
         return await writeNewRoom(roomHost, attempt + 1);
       }
     } catch (error) {
+      toast("Failed to create lobby.", { type: "error" });
       console.error("Failed to create lobby", error);
-      // TODO: display toast
     }
   };
 
@@ -105,7 +105,9 @@ const PlayWithFriendMenu = () => {
 
   return (
     <div className="space-y-2">
-      <Button onClick={() => createRoom()}>Create a room</Button>
+      <Button disabled={isCreatingRoom} onClick={() => createRoom()}>
+        {isCreatingRoom ? "Initializing..." : "Create a room"}
+      </Button>
 
       <span className="block text-center">- or -</span>
 

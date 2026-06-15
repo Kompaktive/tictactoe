@@ -11,6 +11,7 @@ import type { Route } from "./+types/root";
 import "./app.css";
 import Navbar from "./components/organisms/Navbar";
 import { CookiesProvider } from "react-cookie";
+import { Bounce, ToastContainer } from "react-toastify";
 
 export const links: Route.LinksFunction = () => [
   {
@@ -69,6 +70,15 @@ export default function App() {
         sameSite: "lax",
       }}
     >
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        closeOnClick
+        pauseOnFocusLoss
+        pauseOnHover
+        theme="dark"
+        transition={Bounce}
+      />
       <Outlet />
     </CookiesProvider>
   );
