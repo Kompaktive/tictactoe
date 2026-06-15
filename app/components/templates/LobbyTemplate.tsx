@@ -5,6 +5,9 @@ import useNicknameStore from "~/stores/useNicknameStore";
 import type { GameSession, Pairing, Player } from "~/types/game";
 import { generateRandomNickname } from "~/utils/generate";
 import TextField from "../atoms/TextField";
+import { TbCopy } from "react-icons/tb";
+import Button from "../atoms/Button";
+import { MdInfo } from "react-icons/md";
 
 type Props = {
   roomId: string;
@@ -100,49 +103,59 @@ const LobbyTemplate = ({ roomId, host }: Props) => {
   };
 
   return (
-    <main className="mx-8 flex h-screen flex-col items-center justify-center">
-      <section className="bg-dark rounded-2xl p-4 text-white">
-        {isHost ? (
-          <Invitation />
-        ) : (
-          <>
-            <label className="relative">
-              <span className="absolute -top-8">Enter your nickname</span>
-              <TextField
-                className="w-full"
-                value={storedNickname}
-                onChange={(e) => storeNickname(e.target.value)}
-                spellCheck={false}
-                maxLength={15}
-              />
-            </label>
-            Host: {host.nickname}
-            <button
-              className="bg-background w-full rounded-lg p-2"
-              onClick={() => joinAsGuest()}
-            >
-              Join Game
-            </button>
-          </>
-        )}
-      </section>
-    </main>
-  );
-};
+    <main className="flex grow flex-col justify-center space-y-8 px-8">
+      {isHost ? (
+        <article className="bg-secondary rounded-xl p-4 text-white">
+          <span className="block">
+            Host:{" "}
+            <span className="font-google text-accent-1 font-medium">
+              {host.nickname}
+            </span>
+          </span>
 
-const Invitation = () => {
-  return (
-    <>
-      Click to copy. Send this link to your friend
-      <button
-        className="bg-background w-full rounded-lg p-2"
-        onClick={() => {
-          navigator.clipboard.writeText(window.location.href);
-        }}
-      >
-        {window.location.href}
-      </button>
-    </>
+          <div className="leading-8">
+            <span>Room Code:</span>
+            <button className="text-accent-1 flex cursor-pointer gap-1">
+              <span className="font-google text-40 font-medium">{roomId}</span>
+              <TbCopy size={20} />
+            </button>
+          </div>
+
+          <hr className="my-4" />
+
+          <p>Send this link to your friend. Click to copy</p>
+          <Button
+            className="mt-2 flex justify-center gap-2"
+            onClick={() => {
+              navigator.clipboard.writeText(window.location.href);
+            }}
+          >
+            {window.location.href}
+            <TbCopy size={20} />
+          </Button>
+        </article>
+      ) : (
+        <section className="space-y-10">
+          <TextField
+            className="w-full"
+            placeholder="Enter your nickname"
+            value={storedNickname}
+            onChange={(e) => storeNickname(e.target.value)}
+            spellCheck={false}
+            maxLength={15}
+          />
+
+          <div className="space-y-4">
+            <article className="border-secondary flex items-center gap-2 rounded-xl border-2 p-4">
+              <MdInfo size={18} />
+              Host: <span className="font-medium">{host.nickname}</span>
+            </article>
+
+            <Button onClick={() => joinAsGuest()}>Join Game</Button>
+          </div>
+        </section>
+      )}
+    </main>
   );
 };
 
