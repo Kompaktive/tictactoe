@@ -95,7 +95,7 @@ const TicTacToeBoard = ({ state, onClickCell, onGameOver }: Props) => {
             )}
             initial={{ width: 0 }}
             animate={{ width: setLineWidth(state) }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: 0.3, delay: 0.2 }}
           />
         )}
       </AnimatePresence>
